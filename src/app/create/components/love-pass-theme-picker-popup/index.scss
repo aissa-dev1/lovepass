@@ -1,0 +1,44 @@
+@import "@/styles/mixins/flex.scss";
+@import "@/styles/mixins/grid.scss";
+
+.love_pass_theme_picker_popup_content {
+  h2 {
+    @apply text-3xl;
+
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .mode_container {
+    @include flex_center();
+
+    gap: theme("gap.4");
+    flex-wrap: wrap;
+    margin-top: theme("spacing.6");
+
+    .mode_switches {
+      @include grid_columns(2);
+
+      width: 100%;
+      gap: theme("gap.2");
+    }
+  }
+
+  h3 {
+    @apply text-xl;
+
+    font-weight: 700;
+    text-align: center;
+    margin-top: theme("spacing.6");
+  }
+
+  .love_pass_card_container {
+    @include flex_center();
+
+    margin-top: theme("spacing.3");
+  }
+
+  .save_changes_btn {
+    margin-top: theme("spacing.3");
+  }
+}
