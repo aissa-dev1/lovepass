@@ -1,0 +1,33 @@
+.popup {
+  @include position_center(fixed);
+  @include flex_center();
+
+  background-color: white;
+  padding: theme("padding.7");
+  border-radius: 0;
+  width: 100%;
+}
+
+.popup__overlay {
+  @include size_full();
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.popup__xmark {
+  position: absolute;
+  top: theme("spacing.2");
+  right: theme("spacing.2");
+  cursor: pointer;
+}
+
+@media screen and (min-width: theme("screens.sm")) {
+  .popup {
+    border-radius: theme("borderRadius.lg");
+    width: fit-content;
+  }
+}
