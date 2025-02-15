@@ -1,0 +1,9 @@
+.label {
+  @apply text-sm;
+
+  width: fit-content;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  color: theme("colors.gray.700");
+}
