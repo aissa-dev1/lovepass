@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import "../styles";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #4a4a4a;
+
+  --color-primary: #d7263d;
+  --color-secondary: #f4e1e8;
+  --color-accent: #ff91a4;
+  --color-neutral: #e5e5e5;
+
+  --navbar-height: 60px;
+  --footer-height: 120px;
+
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 2.5rem;
+  --spacing-3xl: 3rem;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: "Lora", serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Montserrat", sans-serif;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--background);
+}
