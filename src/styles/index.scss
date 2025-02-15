@@ -1,0 +1,13 @@
+@import "./mixins";
+
+@import "./button.scss";
+@import "./input.scss";
+@import "./label.scss";
+@import "./popup.scss";
+@import "./flex.scss";
+
+.label__input__container {
+  @include flex_column();
+
+  gap: theme("spacing.1");
+}
