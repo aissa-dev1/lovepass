@@ -1,0 +1,21 @@
+.button {
+  width: 100%;
+  padding: theme("spacing.2");
+  border-radius: theme("borderRadius.lg");
+  font-weight: 500;
+
+  &--primary {
+    background-color: var(--color-primary);
+    color: var(--background);
+  }
+
+  &--accent {
+    background-color: var(--color-accent);
+    color: var(--background);
+    transition-duration: 300ms;
+
+    &:hover {
+      background-color: var(--color-primary);
+    }
+  }
+}
