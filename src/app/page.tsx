@@ -1,8 +1,8 @@
 import Button from "@/components/button";
 import Footer from "@/components/footer";
-import LovePassCard from "@/components/love-card";
+import { LovePassCard } from "@/components/love-pass-card";
 import NavBar from "@/components/nav-bar";
-import { exampleLovePassCardsThemes } from "@/data/example-love-cards-themes";
+import { lovePassCardsThemesData } from "@/data/love-pass-cards-themes";
 import Link from "next/link";
 
 export default function Home() {
@@ -31,15 +31,14 @@ export default function Home() {
               Example LovePass
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-              {exampleLovePassCardsThemes.map((theme) => (
+              {lovePassCardsThemesData.map((theme) => (
                 <LovePassCard
                   key={theme.name}
-                  backgroundColor={theme.color}
-                  cardTitle="LovePass"
-                  cardSubtitle="Someone Special"
-                  mainText={theme.mainText}
-                  fromText="Aissa"
+                  from="Me"
+                  to="Someone Special"
+                  message={theme.message}
                   emoji={theme.emoji}
+                  backgroundColor={theme.backgroundColor}
                 />
               ))}
             </div>
