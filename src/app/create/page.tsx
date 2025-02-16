@@ -1,31 +1,41 @@
 "use client";
 
-import LovePassCard from "@/components/love-card";
+import { LovePassCard, LovePassCardType } from "@/components/love-pass-card";
 import NavBar from "@/components/nav-bar";
 import EmojiPicker from "emoji-picker-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import "./page.scss";
 import Button from "@/components/button";
 import PopUp from "@/components/popup";
 import LovePassThemePickerPopUp from "./components/love-pass-theme-picker-popup";
+import { services } from "@/services";
+import { useRouter } from "next/navigation";
 
 export default function CreateLovePass() {
-  const [to, setTo] = useState("");
-  const [from, setFrom] = useState("");
-  const [message, setMessage] = useState("");
-  const [emoji, setEmoji] = useState("");
-  const [backgroundColor, setBackgroundColor] = useState("#333333");
+  const [card, setCard] = useState<LovePassCardType>({
+    to: "",
+    from: "",
+    message: "",
+    emoji: "",
+    backgroundColor: "#333333",
+  });
   const [emojiPickerActive, setEmojiPickerActive] = useState(false);
   const [themePickerActive, setThemePickerActive] = useState(false);
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const router = useRouter();
 
-  function handleSubmit(e: any) {
+  async function handleFormSubmit(e: any) {
     e.preventDefault();
-    const lovePassId = Math.random().toString(36).substr(2, 9);
-    const lovePassData = { to, from, message, lovePassId };
-    localStorage.setItem(lovePassId, JSON.stringify(lovePassData));
-    router.push(`/love/${lovePassId}`);
+
+    try {
+      setIsFormSubmitting(true);
+      const response = await services.cards.createOne(card);
+      router.push(`/love/${response}`);
+    } catch (error: any) {
+      alert(error.response.data);
+    } finally {
+      setIsFormSubmitting(false);
+    }
   }
 
   return (
@@ -33,7 +43,7 @@ export default function CreateLovePass() {
       <NavBar />
       <div className="create_love_pass_container">
         <h2>Create Your LovePass</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleFormSubmit}>
           <div className="grid grid-cols-2 gap-4">
             <div className="label__input__container">
               <label htmlFor="to" className="label">
@@ -42,8 +52,8 @@ export default function CreateLovePass() {
               <input
                 id="to"
                 type="text"
-                value={to}
-                onChange={(e) => setTo(e.target.value)}
+                value={card.to}
+                onChange={(e) => setCard({ ...card, to: e.target.value })}
                 className="input"
                 placeholder="Enter the name of your loved one"
                 required
@@ -56,8 +66,8 @@ export default function CreateLovePass() {
               <input
                 id="from"
                 type="text"
-                value={from}
-                onChange={(e) => setFrom(e.target.value)}
+                value={card.from}
+                onChange={(e) => setCard({ ...card, from: e.target.value })}
                 className="input"
                 placeholder="Enter your name"
                 required
@@ -76,13 +86,8 @@ export default function CreateLovePass() {
             </Button>
             {themePickerActive && (
               <LovePassThemePickerPopUp
-                to={to}
-                from={from}
-                message={message}
-                emoji={emoji}
-                backgroundColor={backgroundColor}
-                setBackgroundColor={setBackgroundColor}
-                setEmoji={setEmoji}
+                card={card}
+                setCard={setCard}
                 themePickerActive={themePickerActive}
                 setThemePickerActive={setThemePickerActive}
               />
@@ -104,7 +109,7 @@ export default function CreateLovePass() {
                 >
                   <EmojiPicker
                     onEmojiClick={(emojiData) => {
-                      setEmoji(emojiData.emoji);
+                      setCard({ ...card, emoji: emojiData.emoji });
                       setEmojiPickerActive(false);
                     }}
                   />
@@ -118,24 +123,19 @@ export default function CreateLovePass() {
             </label>
             <textarea
               id="message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              value={card.message}
+              onChange={(e) => setCard({ ...card, message: e.target.value })}
               className="input"
               placeholder="Enter a special message for your loved one"
               required
             ></textarea>
           </div>
-          <Button type="submit">Generate LovePass</Button>
+          <Button type="submit" disabled={isFormSubmitting}>
+            {isFormSubmitting ? "Creating..." : "Create LovePass"}
+          </Button>
         </form>
         <div className="card_container">
-          <LovePassCard
-            backgroundColor={backgroundColor}
-            cardTitle="LovePass"
-            cardSubtitle={to}
-            mainText={message}
-            fromText={from}
-            emoji={emoji}
-          />
+          <LovePassCard {...card} />
         </div>
       </div>
     </>
