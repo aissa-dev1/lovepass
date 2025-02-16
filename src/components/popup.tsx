@@ -1,7 +1,7 @@
 "use client";
 
 import React, { PropsWithChildren } from "react";
-import XmarkIcon from "./icons/outline/xmark";
+import { X } from "lucide-react";
 
 interface PopUpProps extends PropsWithChildren {
   active: boolean;
@@ -12,7 +12,7 @@ export default function PopUp({ active, setActive, children }: PopUpProps) {
   return (
     <div className="popup__overlay" onClick={() => setActive(false)}>
       <div className="popup" onClick={(e) => e.stopPropagation()}>
-        <XmarkIcon className="popup__xmark" onClick={() => setActive(false)} />
+        <X className="popup__close" onClick={() => setActive(false)} />
         {children}
       </div>
     </div>
