@@ -1,50 +1,135 @@
 "use client";
 
-import LovePassCard from "@/components/love-card";
+import Button from "@/components/button";
+import Loader from "@/components/loader";
+import { LovePassCard, LovePassCardType } from "@/components/love-pass-card";
+import NavBar from "@/components/nav-bar";
+import { services } from "@/services";
+import { getAuthToken } from "@/utils/auth-token";
+import { copyText } from "@/utils/copy-text";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ViewLovePass() {
+  const [lovePass, setLovePass] = useState<LovePassCardType>({
+    to: "",
+    from: "",
+    message: "",
+    emoji: "",
+    backgroundColor: "#333333",
+  });
+  const [loading, setLoading] = useState(false);
+  const params = useParams();
   const router = useRouter();
-  const id = null;
-  const [lovePass, setLovePass] = useState(null);
+
+  async function fetchLovePass() {
+    try {
+      setLoading(true);
+      const card = await services.cards.findOneById(
+        (params.id as string) || ""
+      );
+      setLovePass(card);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function deleteLovePass() {
+    const confirmDelete = confirm("Are you sure you want to delete this card?");
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await services.cards.deleteOneById((params.id as string) || "");
+      router.push("/love");
+    } catch (error: any) {
+      console.error(error.response.data);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    if (id) {
-      const storedLovePass = localStorage.getItem(id as string);
-      if (storedLovePass) {
-        setLovePass(JSON.parse(storedLovePass));
-      }
-    }
-  }, [id]);
+    fetchLovePass();
+  }, []);
+
+  if (loading) {
+    return (
+      <>
+        <NavBar />
+        <div className="py-20 bg-neutral">
+          <div className="flex flex-col items-center container mx-auto">
+            <h3 className="text-center text-3xl font-bold text-foreground mb-10">
+              LovePass Card
+            </h3>
+            <Loader />
+          </div>
+        </div>
+      </>
+    );
+  }
 
   if (!lovePass) {
     return (
-      <div className="container mx-auto text-center py-20">
-        <h2 className="text-3xl font-bold mb-6">
-          Oops! This LovePass doesn’t exist.
-        </h2>
-        <Link href="/create">
-          <p className="bg-primary text-white py-2 px-4 rounded-lg">
-            Create a LovePass
-          </p>
-        </Link>
-      </div>
+      <>
+        <NavBar />
+        <div className="py-20 bg-neutral">
+          <div className="flex flex-col items-center container mx-auto">
+            <h3 className="text-center text-3xl font-bold text-foreground mb-10">
+              LovePass Card
+            </h3>
+            <p className="text-center text-xl font-bold text-foreground">
+              Card not found.{" "}
+              <Link href="/" className="underline hover:no-underline">
+                Back
+              </Link>
+            </p>
+          </div>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="container mx-auto py-20">
-      <h2 className="text-3xl font-bold text-center mb-6">Your LovePass</h2>
-      <LovePassCard
-        backgroundColor="#1E3A8A"
-        cardTitle="LovePass"
-        cardSubtitle={`To: ${lovePass.to}`}
-        mainText={lovePass.message}
-        fromText={`From: ${lovePass.from}`}
-        emoji="❤️"
-      />
-    </div>
+    <>
+      <NavBar />
+      <div className="py-20 bg-neutral">
+        <div className="flex flex-col items-center container mx-auto">
+          <h3 className="text-center text-3xl font-bold text-foreground mb-10">
+            LovePass Card
+          </h3>
+          <div key={lovePass._id} className="flex flex-col gap-2">
+            <LovePassCard {...lovePass} />
+            <div className="grid grid-cols-3 gap-2">
+              {lovePass.userAuthToken === getAuthToken() && (
+                <Button variant="accent" disabled>
+                  Edit
+                </Button>
+              )}
+              <Button
+                variant="accent"
+                onClick={() => {
+                  copyText(window.location.href);
+                  alert("Link copied to clipboard!");
+                }}
+              >
+                Share link
+              </Button>
+              {lovePass.userAuthToken === getAuthToken() && (
+                <Button variant="accent" onClick={deleteLovePass}>
+                  Delete
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
