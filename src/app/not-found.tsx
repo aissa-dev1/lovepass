@@ -1,16 +1,22 @@
+import NavBar from "@/components/nav-bar";
 import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="container mx-auto text-center py-20">
-      <h2 className="text-3xl font-bold mb-6">
-        Oops! This LovePass doesn’t exist.
-      </h2>
-      <Link href="/create">
-        <p className="bg-primary text-white py-2 px-4 rounded-lg">
-          Create a LovePass
+    <>
+      <NavBar />
+      <div className="container mx-auto text-center py-20">
+        <h2 className="text-3xl font-bold text-primary lg:text-5xl">
+          Page Not Found
+        </h2>
+        <p className="text-gray-700 my-4 max-w-2xl mx-auto lg:text-lg">
+          The page you are looking for does not exist. Please go back to the{" "}
+          <Link href="/" className="underline hover:no-underline">
+            Home Page
+          </Link>
+          .
         </p>
-      </Link>
-    </div>
+      </div>
+    </>
   );
 }
