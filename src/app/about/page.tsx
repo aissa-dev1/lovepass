@@ -15,8 +15,8 @@ export default function About() {
           </p>
           <h3 className="text-2xl font-semibold mt-6">How LovePass Works</h3>
           <p>
-            1. Go to the Create LovePass page and fill in the recipient's name,
-            your name, and a personal love note.
+            1. Go to the Create LovePass page and fill in the recipient&apos;s
+            name, your name, and a personal love note.
           </p>
           <p>
             2. Generate a unique LovePass ID and share it with your loved one.
@@ -26,8 +26,13 @@ export default function About() {
           </p>
           <h3 className="text-2xl font-semibold mt-6">Privacy</h3>
           <p>
-            Your privacy is important to us. All LovePass data is stored locally
-            on your device and is not shared with any third parties.
+            Your privacy is important to us. Your LovePass data is currently
+            stored in our database, allowing you to retrieve it when needed.
+            However, at this stage, data is not linked to a personal account,
+            meaning access is limited to the device and browser where it was
+            created. In the future, we plan to introduce a way for users to
+            retrieve their LovePass across different devices. We do not share
+            your data with any third parties.
           </p>
           <h3 className="text-2xl font-semibold mt-6">Fun Details</h3>
           <p>
