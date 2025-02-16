@@ -1,20 +1,15 @@
 "use client";
 
 import Button from "@/components/button";
-import LovePassCard from "@/components/love-card";
+import { LovePassCard, LovePassCardType } from "@/components/love-pass-card";
 import PopUp from "@/components/popup";
-import { exampleLovePassCardsThemes } from "@/data/example-love-cards-themes";
 import { useEffect, useState } from "react";
 import "./index.scss";
+import { lovePassCardsThemesData } from "@/data/love-pass-cards-themes";
 
 interface LovePassThemePickerProps {
-  to: string;
-  from: string;
-  message: string;
-  emoji: string;
-  backgroundColor: string;
-  setBackgroundColor: React.Dispatch<React.SetStateAction<string>>;
-  setEmoji: React.Dispatch<React.SetStateAction<string>>;
+  card: LovePassCardType;
+  setCard: React.Dispatch<React.SetStateAction<LovePassCardType>>;
   themePickerActive: boolean;
   setThemePickerActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -23,29 +18,43 @@ export default function LovePassThemePickerPopUp(
   props: LovePassThemePickerProps
 ) {
   const [selectedTheme, setSelectedTheme] = useState<string | null>(
-    exampleLovePassCardsThemes[0].color
+    lovePassCardsThemesData[0].backgroundColor
   );
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [mode, setMode] = useState<"theme" | "solid">("theme");
 
   function saveChanges() {
     if (mode === "theme") {
-      for (const theme of exampleLovePassCardsThemes) {
-        if (theme.color === selectedTheme) {
-          props.setBackgroundColor(theme.color);
-          props.setEmoji(theme.emoji);
+      for (const theme of lovePassCardsThemesData) {
+        if (theme.backgroundColor === selectedTheme) {
+          props.setCard({
+            ...props.card,
+            emoji: theme.emoji,
+            backgroundColor: theme.backgroundColor,
+          });
           break;
         }
       }
     } else {
-      props.setBackgroundColor(selectedColor);
+      props.setCard({ ...props.card, backgroundColor: selectedColor });
     }
 
     props.setThemePickerActive(false);
   }
 
+  function getCurrentCardTheme() {
+    const theme = lovePassCardsThemesData.find(
+      (theme) => theme.backgroundColor === props.card.backgroundColor
+    );
+
+    if (theme) {
+      setSelectedTheme(theme.backgroundColor);
+    }
+  }
+
   useEffect(() => {
-    setSelectedColor(props.backgroundColor);
+    getCurrentCardTheme();
+    setSelectedColor(props.card.backgroundColor);
   }, []);
 
   return (
@@ -84,8 +93,8 @@ export default function LovePassThemePickerPopUp(
                   setSelectedTheme(e.target.value);
                 }}
               >
-                {exampleLovePassCardsThemes.map((theme) => (
-                  <option key={theme.name} value={theme.color}>
+                {lovePassCardsThemesData.map((theme) => (
+                  <option key={theme.name} value={theme.backgroundColor}>
                     {theme.name}
                   </option>
                 ))}
@@ -114,17 +123,18 @@ export default function LovePassThemePickerPopUp(
         <h3>Live Preview</h3>
         <div className="love_pass_card_container">
           <LovePassCard
-            backgroundColor={mode === "theme" ? selectedTheme : selectedColor}
-            cardTitle="LovePass"
-            cardSubtitle={props.to}
-            mainText={props.message}
-            fromText={props.from}
+            to={props.card.to}
+            from={props.card.from}
+            message={props.card.message}
             emoji={
               mode === "theme"
-                ? exampleLovePassCardsThemes.find(
-                    (theme) => theme.color === selectedTheme
+                ? lovePassCardsThemesData.find(
+                    (theme) => theme.backgroundColor === selectedTheme
                   )?.emoji || "❤️"
-                : props.emoji
+                : props.card.emoji
+            }
+            backgroundColor={
+              mode === "theme" ? selectedTheme || "" : selectedColor
             }
           />
         </div>
