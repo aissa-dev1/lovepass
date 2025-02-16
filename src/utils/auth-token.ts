@@ -1,11 +1,3 @@
-export function generateAuthToken() {
-  const token = crypto.randomUUID();
-
-  if (!hasAuthToken()) {
-    updateAuthToken(token);
-  }
-}
-
 export function updateAuthToken(token: string) {
   localStorage.setItem("auth_token", token);
 }
