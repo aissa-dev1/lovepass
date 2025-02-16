@@ -1,35 +1,33 @@
 "use client";
 
-import LovePassCard from "@/components/love-card";
+import Button from "@/components/button";
+import Loader from "@/components/loader";
+import { LovePassCard, LovePassCardType } from "@/components/love-pass-card";
 import NavBar from "@/components/nav-bar";
+import { services } from "@/services";
+import { copyText } from "@/utils/copy-text";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function LovePassCards() {
-  const [lovePasses, setLovePasses] = useState([]);
+  const [lovePasses, setLovePasses] = useState<LovePassCardType[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  async function fetchLovePasses() {
+    try {
+      setLoading(true);
+      const cards = await services.cards.findManyByAuthToken();
+      setLovePasses(cards);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    const storedLovePasses = JSON.parse(
-      localStorage.getItem("lovePasses") || "[]"
-    );
-    setLovePasses(storedLovePasses);
+    fetchLovePasses();
   }, []);
-
-  if (lovePasses.length === 0) {
-    return (
-      <>
-        <NavBar />
-        <div className="container mx-auto text-center py-20">
-          <h2 className="text-3xl font-bold mb-6">No LovePasses Found</h2>
-          <Link href="/create">
-            <p className="bg-primary text-white py-2 px-4 rounded-lg">
-              Create a LovePass
-            </p>
-          </Link>
-        </div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -39,19 +37,43 @@ export default function LovePassCards() {
           <h3 className="text-center text-3xl font-bold text-foreground mb-10">
             Your LovePasses
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {lovePasses.map((lovePass, index) => (
-              <LovePassCard
-                key={index}
-                backgroundColor="#1E3A8A"
-                cardTitle="LovePass"
-                cardSubtitle={`To: ${lovePass.to}`}
-                mainText={lovePass.message}
-                fromText={`From: ${lovePass.from}`}
-                emoji="❤️"
-              />
-            ))}
-          </div>
+          {loading ? (
+            <Loader />
+          ) : lovePasses.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {lovePasses.map((lovePass) => (
+                <div key={lovePass._id} className="flex flex-col gap-2">
+                  <Link href={`/love/${lovePass.lovePassId}`}>
+                    <LovePassCard {...lovePass} />
+                  </Link>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Link href={`/love/${lovePass.lovePassId}`}>
+                      <Button variant="accent">View</Button>
+                    </Link>
+                    <Button
+                      variant="accent"
+                      onClick={() => {
+                        copyText(
+                          window.location.origin +
+                            `/love/${lovePass.lovePassId}`
+                        );
+                        alert("Link copied to clipboard!");
+                      }}
+                    >
+                      Share link
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-xl font-bold text-foreground">
+              You don&apos;t have any LovePasses yet.{" "}
+              <Link href="/create" className="underline hover:no-underline">
+                Create one
+              </Link>
+            </p>
+          )}
         </div>
       </div>
     </>
