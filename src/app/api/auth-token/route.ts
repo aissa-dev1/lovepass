@@ -1,16 +1,18 @@
 import { AuthToken } from "@/lib/models/auth-token";
-import { generateFingerprintFromReq } from "../utils/generate-fingerprint-from-req";
+import { generateFingerprint } from "../utils/generate-fingerprint";
+import { created, ok } from "../utils/response";
 
 export async function POST(req: Request) {
   const token = crypto.randomUUID();
-  const fingerprint = generateFingerprintFromReq(req);
-  const authToken = await AuthToken.findOne({ fingerprint });
+  const fingerprint = generateFingerprint(req);
+  const authToken = (await AuthToken.findOne({ fingerprint })
+    .lean()
+    .exec()) as { token: string; fingerprint: string } | null;
 
   if (authToken) {
-    return new Response(authToken.token, { status: 201 });
+    return ok(authToken.token);
   }
 
-  const newAuthToken = await AuthToken.create({ token, fingerprint });
-  await newAuthToken.save();
-  return new Response(token, { status: 201 });
+  await AuthToken.create({ token, fingerprint });
+  return created(token);
 }

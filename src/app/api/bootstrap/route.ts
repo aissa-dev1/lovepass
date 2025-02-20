@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/lib/db";
+import { ok } from "../utils/response";
 
 export async function POST() {
   await connectToDatabase();
-  return new Response("Hello, PassLove!");
+  return ok("Hello, PassLove!");
 }

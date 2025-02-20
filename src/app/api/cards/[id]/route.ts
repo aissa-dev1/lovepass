@@ -1,29 +1,25 @@
-import { AuthToken } from "@/lib/models/auth-token";
-import { generateFingerprintFromReq } from "../../utils/generate-fingerprint-from-req";
-import { getAuthTokenFromReq } from "../../utils/get-auth-token-from-req";
 import { Card } from "@/lib/models/card";
+import { verifyAuthToken } from "@/lib/verify-auth-token";
+import { ok, unAuthorized } from "../../utils/response";
 
 export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
-  const card = await Card.findOne({ lovePassId: params.id });
-  return new Response(JSON.stringify(card), { status: 200 });
+  const card = await Card.findOne({ lovePassId: params.id }).lean();
+  return ok(JSON.stringify(card));
 }
 
 export async function DELETE(
   req: Request,
   { params }: { params: { id: string } }
 ) {
-  const token = getAuthTokenFromReq(req);
-  const fingerprint = generateFingerprintFromReq(req);
-
-  const authToken = await AuthToken.findOne({ token, fingerprint });
+  const authToken = await verifyAuthToken(req);
 
   if (!authToken) {
-    return new Response("Unauthorized", { status: 401 });
+    return unAuthorized();
   }
 
   await Card.findOneAndDelete({ lovePassId: params.id });
-  return new Response("Card deleted successfully", { status: 200 });
+  return ok("Card deleted successfully");
 }
