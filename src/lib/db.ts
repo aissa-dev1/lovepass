@@ -4,12 +4,11 @@ import mongoose from "mongoose";
 
 export async function connectToDatabase() {
   try {
-    const dbName =
-      process.env.NEXT_PUBLIC_NODE_ENV === "development"
-        ? "passlove-dev"
-        : "passlove";
     await mongoose.connect(process.env.NEXT_PUBLIC_DB_URI as string, {
-      dbName,
+      dbName:
+        process.env.NEXT_PUBLIC_NODE_ENV === "development"
+          ? "passlove-dev"
+          : "passlove",
     });
     console.log("db connected");
   } catch (error) {
