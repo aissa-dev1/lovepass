@@ -30,6 +30,7 @@ export default function CreateLovePass() {
     try {
       setIsFormSubmitting(true);
       const response = await services.cards.createOne(card);
+      sessionStorage.removeItem("love_passes");
       router.push(`/love/${response}`);
     } catch (error: any) {
       alert(error.response.data);
