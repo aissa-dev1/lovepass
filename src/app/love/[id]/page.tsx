@@ -47,6 +47,7 @@ export default function ViewLovePass() {
     try {
       setLoading(true);
       await services.cards.deleteOneById((params.id as string) || "");
+      sessionStorage.removeItem("love_passes");
       router.push("/love");
     } catch (error: any) {
       console.error(error.response.data);
