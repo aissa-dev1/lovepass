@@ -14,10 +14,18 @@ export default function LovePassCards() {
   const [loading, setLoading] = useState(false);
 
   async function fetchLovePasses() {
+    const cachedLovePasses = sessionStorage.getItem("love_passes");
+
+    if (cachedLovePasses) {
+      setLovePasses(JSON.parse(cachedLovePasses));
+      return;
+    }
+
     try {
       setLoading(true);
       const cards = await services.cards.findManyByAuthToken();
       setLovePasses(cards);
+      sessionStorage.setItem("love_passes", JSON.stringify(cards));
     } catch (error) {
       console.error(error);
     } finally {
