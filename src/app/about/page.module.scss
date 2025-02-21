@@ -1,0 +1,25 @@
+.page {
+  @apply container py-20;
+
+  margin: 0 auto;
+
+  h2 {
+    @apply text-3xl;
+
+    font-weight: 700;
+    text-align: center;
+  }
+}
+
+.page_content {
+  @apply max-w-2xl text-lg mt-6;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  h3 {
+    @apply text-2xl mt-6;
+
+    font-weight: 600;
+  }
+}
