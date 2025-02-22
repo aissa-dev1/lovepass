@@ -1,7 +1,6 @@
 "use client";
 
 import { LovePassCard, LovePassCardType } from "@/components/love-pass-card";
-import NavBar from "@/components/nav-bar";
 import EmojiPicker from "emoji-picker-react";
 import { useState } from "react";
 import "./page.scss";
@@ -10,6 +9,7 @@ import PopUp from "@/components/popup";
 import LovePassThemePickerPopUp from "./components/love-pass-theme-picker-popup";
 import { services } from "@/services";
 import { useRouter } from "next/navigation";
+import NavBar from "@/components/nav-bar";
 
 export default function CreateLovePass() {
   const [card, setCard] = useState<LovePassCardType>({
