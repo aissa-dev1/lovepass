@@ -1,5 +1,3 @@
-@import "@/styles/mixins/flex.scss";
-
 .nav_bar {
   @apply shadow-md;
 
@@ -14,8 +12,9 @@
 .nav_bar_container {
   @apply container px-6;
 
-  @include flex_center();
-
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin: 0 auto;
 
   a {
