@@ -11,3 +11,11 @@
 
   gap: theme("spacing.1");
 }
+
+.underline__link {
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+}

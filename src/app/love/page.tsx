@@ -77,7 +77,7 @@ export default function LovePassCards() {
           ) : (
             <p className="text-center text-xl font-bold text-foreground">
               You don&apos;t have any LovePasses yet.{" "}
-              <Link href="/create" className="underline hover:no-underline">
+              <Link href="/create" className="underline__link">
                 Create one
               </Link>
             </p>

@@ -87,7 +87,7 @@ export default function ViewLovePass() {
             </h3>
             <p className="text-center text-xl font-bold text-foreground">
               Card not found.{" "}
-              <Link href="/" className="underline hover:no-underline">
+              <Link href="/" className="underline__link">
                 Back
               </Link>
             </p>

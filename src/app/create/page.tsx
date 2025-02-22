@@ -3,13 +3,12 @@
 import { LovePassCard, LovePassCardType } from "@/components/love-pass-card";
 import EmojiPicker from "emoji-picker-react";
 import { useState } from "react";
-import "./page.scss";
 import Button from "@/components/button";
 import PopUp from "@/components/popup";
-import LovePassThemePickerPopUp from "./components/love-pass-theme-picker-popup";
 import { services } from "@/services";
 import { useRouter } from "next/navigation";
 import NavBar from "@/components/nav-bar";
+import LovePassThemePickerPopUp from "./components/love-pass-theme-picker-popup";
 
 export default function CreateLovePass() {
   const [card, setCard] = useState<LovePassCardType>({
@@ -42,9 +41,12 @@ export default function CreateLovePass() {
   return (
     <>
       <NavBar />
-      <div className="create_love_pass_container">
-        <h2>Create Your LovePass</h2>
-        <form onSubmit={handleFormSubmit}>
+      <div className="container mx-auto py-20">
+        <h2 className="text-3xl font-bold text-center">Create Your LovePass</h2>
+        <form
+          onSubmit={handleFormSubmit}
+          className="flex flex-col gap-4 border border-gray-300 p-6 rounded-lg mt-6"
+        >
           <div className="grid grid-cols-2 gap-4">
             <div className="label__input__container">
               <label htmlFor="to" className="label">
@@ -135,7 +137,7 @@ export default function CreateLovePass() {
             {isFormSubmitting ? "Creating..." : "Create LovePass"}
           </Button>
         </form>
-        <div className="card_container">
+        <div className="flex__center mt-6">
           <LovePassCard {...card} />
         </div>
       </div>

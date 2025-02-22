@@ -4,7 +4,6 @@ import Button from "@/components/button";
 import { LovePassCard, LovePassCardType } from "@/components/love-pass-card";
 import PopUp from "@/components/popup";
 import { useEffect, useState } from "react";
-import "./index.scss";
 import { lovePassCardsThemesData } from "@/data/love-pass-cards-themes";
 
 interface LovePassThemePickerProps {
@@ -62,11 +61,13 @@ export default function LovePassThemePickerPopUp(
       active={props.themePickerActive}
       setActive={props.setThemePickerActive}
     >
-      <div className="love_pass_theme_picker_popup_content">
-        <h2>Pick a Theme or Solid Color</h2>
+      <div>
+        <h2 className="text-3xl font-bold text-center">
+          Pick a Theme or Solid Color
+        </h2>
 
-        <div className="mode_container">
-          <div className="mode_switches">
+        <div className="flex__center gap-4 flex-wrap mt-6">
+          <div className="w-full grid grid-cols-2 gap-4">
             <Button
               type="button"
               variant={mode === "theme" ? "primary" : "accent"}
@@ -120,8 +121,8 @@ export default function LovePassThemePickerPopUp(
           )}
         </div>
 
-        <h3>Live Preview</h3>
-        <div className="love_pass_card_container">
+        <h3 className="text-2xl font-bold mt-6 text-center">Live Preview</h3>
+        <div className="flex__center mt-6">
           <LovePassCard
             to={props.card.to}
             from={props.card.from}
@@ -138,11 +139,7 @@ export default function LovePassThemePickerPopUp(
             }
           />
         </div>
-        <Button
-          type="button"
-          className="save_changes_btn"
-          onClick={saveChanges}
-        >
+        <Button type="button" className="mt-3" onClick={saveChanges}>
           Save changes
         </Button>
       </div>
