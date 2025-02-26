@@ -7,8 +7,8 @@ export async function connectToDatabase() {
     await mongoose.connect(process.env.NEXT_PUBLIC_DB_URI as string, {
       dbName:
         process.env.NEXT_PUBLIC_NODE_ENV === "development"
-          ? "passlove-dev"
-          : "passlove",
+          ? "lovepass-dev"
+          : "lovepass",
     });
     console.log("db connected");
   } catch (error) {
