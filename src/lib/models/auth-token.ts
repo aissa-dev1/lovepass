@@ -2,6 +2,8 @@
 
 import { Schema, model, models } from "mongoose";
 
+export type AuthTokenType = { token: string; fingerprint: string };
+
 const authTokenSchema = new Schema(
   {
     token: { type: String, required: true, unique: true },

@@ -1,4 +1,4 @@
-import { AuthToken } from "@/lib/models/auth-token";
+import { AuthToken, AuthTokenType } from "@/lib/models/auth-token";
 import { generateFingerprint } from "../utils/generate-fingerprint";
 import { created, ok } from "../utils/response";
 
@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   const fingerprint = generateFingerprint(req);
   const authToken = (await AuthToken.findOne({ fingerprint })
     .lean()
-    .exec()) as { token: string; fingerprint: string } | null;
+    .exec()) as AuthTokenType | null;
 
   if (authToken) {
     return ok(authToken.token);
