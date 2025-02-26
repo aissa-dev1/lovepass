@@ -8,7 +8,7 @@ import PopUp from "@/components/popup";
 import { services } from "@/services";
 import { useRouter } from "next/navigation";
 import NavBar from "@/components/nav-bar";
-import LovePassThemePickerPopUp from "./components/love-pass-theme-picker-popup";
+import LovePassThemePickerPopUp from "@/components/love-pass-theme-picker-popup";
 
 export default function CreateLovePass() {
   const [card, setCard] = useState<LovePassCardType>({

@@ -137,6 +137,7 @@ export default function LovePassThemePickerPopUp(
             backgroundColor={
               mode === "theme" ? selectedTheme || "" : selectedColor
             }
+            lovePassId={props.card.lovePassId}
           />
         </div>
         <Button type="button" className="mt-3" onClick={saveChanges}>
