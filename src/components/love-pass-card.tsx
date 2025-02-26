@@ -2,7 +2,8 @@ import clsx from "clsx";
 
 export type LovePassCardType = {
   _id?: string;
-  userAuthToken?: string;
+  authToken?: string;
+  fingerprint?: string;
   to: string;
   from: string;
   message: string;
