@@ -21,8 +21,8 @@ export class CardsService {
     return response.data;
   }
 
-  async findOneById(id: string): Promise<LovePassCardType> {
-    const response = await axios.get(`/api/cards/${id}`, {
+  async findOneByLovePassId(lovePassId: string): Promise<LovePassCardType> {
+    const response = await axios.get(`/api/cards/${lovePassId}`, {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
@@ -30,8 +30,19 @@ export class CardsService {
     return response.data;
   }
 
-  async deleteOneById(id: string): Promise<void> {
-    await axios.delete(`/api/cards/${id}`, {
+  async updateOneByLovePassId(
+    lovePassId: string,
+    data: LovePassCardType
+  ): Promise<void> {
+    await axios.patch(`/api/cards/${lovePassId}`, data, {
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
+  }
+
+  async deleteOneByLovePassId(lovePassId: string): Promise<void> {
+    await axios.delete(`/api/cards/${lovePassId}`, {
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,
       },
