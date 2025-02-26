@@ -19,10 +19,12 @@ export async function GET(req: Request) {
     return unAuthorized();
   }
 
-  const cards = await Card.find({
-    userAuthToken: authToken.token,
-  }).lean();
-  return ok(JSON.stringify(cards));
+  const lovePasses = await Card.find({
+    authToken: authToken.token,
+  })
+    .select("-fingerprint")
+    .lean();
+  return ok(JSON.stringify(lovePasses));
 }
 
 export async function POST(req: Request) {
@@ -72,7 +74,8 @@ export async function POST(req: Request) {
   const lovePassId = generateLovePassId();
   await Card.create({
     ...data,
-    userAuthToken: authToken.token,
+    authToken: authToken.token,
+    fingerprint: authToken.fingerprint,
     lovePassId,
   });
   return created(lovePassId);
