@@ -21,3 +21,9 @@ export function created(message?: string): Response {
 export function ok(message?: string): Response {
   return new Response(message || "OK", { status: 200 });
 }
+
+export function tooManyRequests(message?: string): Response {
+  return new Response(message || "Too Many Requests, please try again later", {
+    status: 429,
+  });
+}
