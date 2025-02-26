@@ -4,7 +4,8 @@ import { Schema, model, models } from "mongoose";
 
 const cardSchema = new Schema(
   {
-    userAuthToken: { type: String, required: true },
+    authToken: { type: String, required: true },
+    fingerprint: { type: String, required: true },
     to: { type: String, required: true },
     from: { type: String, required: true },
     message: { type: String, required: true },
