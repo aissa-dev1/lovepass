@@ -2,7 +2,15 @@ import { LovePassCardType } from "@/components/love-pass-card";
 import { Card } from "@/lib/models/card";
 import { generateLovePassId } from "@/utils/generate-lovepass-id";
 import { verifyAuthToken } from "@/lib/verify-auth-token";
-import { badRequest, created, ok, unAuthorized } from "../utils/response";
+import {
+  badRequest,
+  created,
+  ok,
+  tooManyRequests,
+  unAuthorized,
+} from "../utils/response";
+import { RateLimit, RateLimitType } from "@/lib/models/rate-limit";
+import { handleRateLimit } from "@/lib/handle-rate-limit";
 
 export async function GET(req: Request) {
   const authToken = await verifyAuthToken(req);
@@ -34,6 +42,31 @@ export async function POST(req: Request) {
   }
   if (!data.emoji) {
     return badRequest("Please pick an emoji");
+  }
+
+  const rateLimit = (await RateLimit.findOne({
+    fingerprint: authToken.fingerprint,
+    route: { name: "cards", method: "POST" },
+  }).lean()) as RateLimitType | null;
+  const {
+    createRateLimit,
+    checkToResetRateCount,
+    checkToUpdateRateCount,
+    reachedRateLimit,
+  } = await handleRateLimit();
+
+  if (rateLimit) {
+    await checkToResetRateCount(rateLimit);
+    await checkToUpdateRateCount(rateLimit);
+
+    if (reachedRateLimit(rateLimit)) {
+      return tooManyRequests();
+    }
+  } else {
+    await createRateLimit(authToken.fingerprint, {
+      name: "cards",
+      method: "POST",
+    });
   }
 
   const lovePassId = generateLovePassId();
