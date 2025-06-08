@@ -8,10 +8,6 @@ export default function Footer() {
         <Link href="/">
           <span className="font-bold">LovePass</span>
         </Link>{" "}
-        by{" "}
-        <a href="https://www.instagram.com/aissa.creates" target="_blank">
-          <span className="font-bold">@aissa.creates</span>
-        </a>{" "}
         All rights reserved.
       </p>
       <div className="flex items-center gap-3">
